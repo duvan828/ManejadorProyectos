@@ -110,4 +110,14 @@ class ActividadController
          }
     }
     
+    public function getEstados(){
+        try {
+            $estado = $_GET["estado"];
+            $data = $this->model->getEstado($estado);
+            return $data;
+        } catch (PDOException $e) {
+            echo $e->getCode();
+            echo $e->getMessage();
+         }
+    }
 }

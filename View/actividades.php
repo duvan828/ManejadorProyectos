@@ -29,8 +29,12 @@
     $ctlActividad = new ActividadController();
     $personas = $ctlPersona->list();
     $proyectos = $ctlProyecto->list();
-    $actividades = $ctlActividad->list();
-
+    if(isset($_GET['estado'])){
+        $actividades = $ctlActividad->getEstados();
+    } 
+    else {
+        $actividades = $ctlActividad->list();
+    }
     function infoPro($idProyecto, $ctlProyecto){
         $proyecto = $ctlProyecto->info($idProyecto);
         return $proyecto['descripcion'];
@@ -174,6 +178,7 @@
             </div>
             <?php else: ?>
             <div class="col-4 mb-4">
+                
                 <div class="card card-form w-100">
                     <h5 class="card-header">Registro Actividad</h5>
                     <div class="card-body">
@@ -235,7 +240,13 @@
 
             <!-- Tabla -->
             <div class="col-8 mb-4" >
-                <div class="card w-100">
+                <a href="actividades.php" class="btn btn-primary mx-2">TODOS</a>
+                <a href="actividades.php?estado=terminado" class="btn btn-success mx-2">TERMINADOS</a>
+                <a href="actividades.php?estado=comenzado" class="btn btn-warning mx-2">COMENZANDOS</a>
+                <a href="actividades.php?estado=sin iniciar" class="btn btn-dark mx-2">SIN INICIAR</a>
+                <a href="actividades.php?estado=Atrasado" class="btn btn-danger mx-2">ATRASADO</a>
+
+                <div class="card my-3 w-100">
                     <div class="card-body">
                         <table class="table">
                             <thead>
@@ -254,6 +265,11 @@
                             <tbody>
                                 <?php
                                     foreach ($actividades as $value) {
+                                        $estado = "";
+                                        if ($value['estado']== 'terminado') $estado = '<span class="badge rounded-pill text-bg-success">Terminado</span>';
+                                        else if ($value['estado']== 'comenzado') $estado = '<span class="badge rounded-pill text-bg-warning">Comenzado</span>';
+                                        else if ($value['estado']== 'sin iniciar') $estado = '<span class="badge rounded-pill text-bg-dark">Sin iniciar</span>';
+                                        else if ($value['estado']== 'atrasado') $estado = '<span class="badge rounded-pill text-bg-danger">Atrasado</span>';
                                         echo '<tr>
                                             <th scope="row">'.$value['idActividad'].'</th>
                                             <td>'.$value['descripcion'].'</td>
@@ -261,7 +277,7 @@
                                             <td>'.$value['fecha_fin'].'</td>
                                             <td>'.infoPro($value['idProyecto'], $ctlProyecto).'</td>
                                             <td>'.info($value['responsable'], $ctlPersona).'</td>
-                                            <td>'.$value['estado'].'</td>
+                                            <td>'.$estado.'</td>
                                             <td>'.$value['presupuesto'].'</td>
                                             <td>
                                             <a class="btn btn-primary" href="../index.php?controller=actividad&action=listId&id='.$value['idActividad'].'">

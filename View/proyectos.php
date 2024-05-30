@@ -10,7 +10,7 @@
 
     $idProyecto = "";
 
-    if($_GET["p1"]!="") {
+    if(isset($_GET["p1"])) {
         $idProyecto = $_GET['p1'];
         $descripcion = $_GET['p2'];
         $fecha_inicio = $_GET['p3'];
@@ -25,8 +25,14 @@
 
     $ctlPersona = new PersonaController();
     $ctlProyecto = new ProyectoController();
+
     $personas = $ctlPersona->list();
-    $proyectos = $ctlProyecto->list();
+    if(isset($_GET['estado'])){
+        $proyectos = $ctlProyecto->getEstadosProyectos();
+    }
+    else {
+        $proyectos = $ctlProyecto->list();
+    }
 
     function info($responsable, $ctlPersona){
         $persona = $ctlPersona->info($responsable);
@@ -89,7 +95,7 @@
         </div>
     </div>
     </nav>
-    <div class=" text-center px-5 my-5 w-100">
+    <div class=" text-center px-5 w-100" style="margin-top: 80px;">
         <div class="row w-100">
             <!-- Formulario -->
             <?php if ($idProyecto!=""): ?>
@@ -209,7 +215,12 @@
 
             <!-- Tabla -->
             <div class="col-8 mb-4" >
-                <div class="card w-100">
+            <a href="proyectos.php" class="btn btn-primary mx-2">TODOS</a>
+            <a href="proyectos.php?estado=terminado" class="btn btn-success mx-2">TERMINADOS</a>
+            <a href="proyectos.php?estado=comenzado" class="btn btn-warning mx-2">COMENZANDOS</a>
+            <a href="proyectos.php?estado=sin iniciar" class="btn btn-dark mx-2">SIN INICIAR</a>
+            <a href="proyectos.php?estado=Atrasado" class="btn btn-danger mx-2">ATRASADO</a>
+                <div class="card w-100 mt-2">
                     <div class="card-body">
                         <table class="table">
                             <thead>
@@ -228,6 +239,11 @@
                             <tbody>
                                 <?php
                                     foreach ($proyectos as $value) {
+                                        $estado = "";
+                                        if ($value['estado']== 'terminado') $estado = '<span class="badge rounded-pill text-bg-success">Terminado</span>';
+                                        else if ($value['estado']== 'comenzado') $estado = '<span class="badge rounded-pill text-bg-warning">Comenzado</span>';
+                                        else if ($value['estado']== 'sin iniciar') $estado = '<span class="badge rounded-pill text-bg-dark">Sin iniciar</span>';
+                                        else if ($value['estado']== 'atrasado') $estado = '<span class="badge rounded-pill text-bg-danger">Atrasado</span>';
                                         echo '<tr>
                                             <th scope="row">'.$value['idProyecto'].'</th>
                                             <td>'.$value['descripcion'].'</td>
@@ -236,7 +252,7 @@
                                             <td>'.$value['valor'].'</td>
                                             <td>'.$value['lugar'].'</td>
                                             <td>'.info($value['responsable'], $ctlPersona).'</td>
-                                            <td>'.$value['estado'].'</td>
+                                            <td>'.$estado.'</td>
                                             <td>
                                             <a class="btn btn-primary" href="../index.php?controller=proyecto&action=listId&id='.$value['idProyecto'].'">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">

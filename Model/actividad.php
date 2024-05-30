@@ -43,5 +43,11 @@ class Actividad extends DAO
     public function remove($id) {
         $this->delete($id);
     }
+
+    public function getEstado($param)
+    {
+        $result = $this->query("SELECT * FROM $this->table WHERE estado = '". $param."'");
+        return $result;
+    }
     
 }
