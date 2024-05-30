@@ -6,8 +6,8 @@ class PersonasxRecursos extends DAO
 {
 
 
-    protected $table = "personasxrecursos";
-    protected $ident = "idRecurso";
+    protected $table = "personasxtareas";
+    protected $ident = "idPersona";
 
 
     public function getAll()

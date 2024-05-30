@@ -38,7 +38,7 @@ class PersonasxtareasController
         try {
             $id = $_GET["id"];
             $data = $this->model->getById($id);
-            header("Location: view/tareas.php?p1={$data['idPersona']}&p2={$data['idTarea']}&p3={$data['duracion']}");
+            header("Location: view/personas.php?p1={$data['idPersona']}&p2={$data['idTarea']}&p3={$data['duracion']}");
         } catch (PDOException $e) {
             echo $e->getCode();
             echo $e->getMessage();
@@ -54,7 +54,7 @@ class PersonasxtareasController
                     "duracion" => $_POST['duracion']
                 ];
                 $this->model->store($data);
-                header("Location: view/tareas.php");
+                header("Location: view/personas.php");
                 exit();
             } else {
                 echo "ERROR: Método de solicitud no permitido.";
@@ -79,7 +79,7 @@ class PersonasxtareasController
                     "duracion" => $_POST['duracion']
                 ];
                 $this->model->setUpdate($id, $data);
-                header("Location: view/tareas.php");
+                header("Location: view/personas.php");
                 exit();
             } else {
                 echo "ERROR";
@@ -95,7 +95,7 @@ class PersonasxtareasController
         try {
             $id = $_GET["id"];
             $this->model->remove($id);
-            header("Location: view/tareas.php");
+            header("Location: view/personas.php");
         } catch (PDOException $e) {
             echo $e->getCode();
             echo $e->getMessage();

@@ -39,7 +39,7 @@
                                         </form>
                                     </div>
                                     <div class="card-footer text-center py-3">
-                                        <!-- <div class="small"><a href="registro.php">¿No tienes cuenta? Registrate</a></div> -->
+                                        <div class="small"><a href="registro.php">¿No tienes cuenta? Registrate</a></div>
                                     </div>
                                 </div>
                             </div>

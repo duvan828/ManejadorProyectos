@@ -24,9 +24,22 @@
         $profesion = $_GET['p9'];
     }
     require_once(__DIR__ . '/../Controller/personaController.php');
+    require_once(__DIR__ . '/../Controller/tareaController.php');
+    require_once(__DIR__ . '/../Controller/personasxtareasController.php');
 
     $controller = new PersonaController();
+    $ctlTareas = new TareaController();
+    $ctlPersonasxtareas = new PersonasxtareasController();
+
     $personas = $controller->list();
+    $tareas = $ctlTareas->list();
+    $asignaciones = $ctlPersonasxtareas->list();
+
+    function info($id, $ctl){
+        $res = $ctl->info($id);
+        return $res;
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -245,6 +258,84 @@
             </div>
         </div>
     </div>
+    <div class=" text-center px-5 my-5 w-100">
+        <div class="row w-100">
+            <!-- Formulario -->
+            <div class="col-4 mb-4">
+                <div class="card card-form w-100">
+                    <h5 class="card-header">Asignar tareas a personas</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">Asignación</h5>
+                        <form class="form" action="../index.php?controller=personasxtareas&action=insert" method="post">
+                            <div class="form-floating mb-2">
+                                <select class="form-select" id="idPersona" name="idPersona" aria-label="Persona" >
+                                    <option>Seleccionar</option>
+                                    <?php
+                                    foreach ($personas as $value) {
+                                        echo '<option value="'.$value['idPersona'].'">'.$value['nombre'].' '.$value['apellido'].'</option>';
+                                    }
+                                    ?>
+                                </select>
+                                <label for="idPersona">Persona</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <select class="form-select" id="idTarea" name="idTarea" aria-label="Tarea" >
+                                    <option>Seleccionar</option>
+                                    <?php
+                                    foreach ($tareas as $value) {
+                                        echo '<option value="'.$value['idTarea'].'">'.$value['descripcion'].'</option>';
+                                    }
+                                    ?>
+                                </select>
+                                <label for="idTarea">Tarea</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input type="number" class="form-control" id="duracion" name="duracion" placeholder="duracion" required>
+                                <label for="duracion">Duración</label>
+                            </div>
+                            <button class="btn btn-outline-warning" type="submit">Asignar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="col-8 mb-4" >
+                <div class="card w-100">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">PERSONA</th>
+                                    <th scope="col">TAREA</th>
+                                    <th scope="col">DURACIÓN</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    foreach ($asignaciones as $value) {
+                                        $r = info($value['idPersona'], $controller);
+                                        echo '<tr>
+                                            <td>'.$r["nombre"].' '.$r["apellido"].'</td>
+                                            <td>'.info($value['idTarea'], $ctlTareas)['descripcion'].'</td>
+                                            <td>'.$value['duracion'].'</td>
+                                            <td> 
+                                            <a class="btn btn-danger" href="../index.php?controller=personasxrecursos&action=delete&id='.$value['idPersona'].'">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                                </svg>
+                                            </a>
+                                            </td>
+                                        </tr>';
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

@@ -49,8 +49,10 @@ class PersonaController
     }
 
     public function leave(){
+        $_SESSION["id"] = null;
         session_unset();
         session_destroy();
+        session_cache_expire(60000);
         header("Location: view/login.php");
         exit();
     }
