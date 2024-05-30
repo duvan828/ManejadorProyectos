@@ -14,7 +14,7 @@ class DB {
                 "db_host" => "localhost",
                 "db_port" => "3306",
                 "db_user" => "root",
-                "db_pass" => "qwe.123",
+                "db_pass" => "admin",
                 "db_name" => "proyectos",
                 "db_charset" => "UTF-8");
 
